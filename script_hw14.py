@@ -1,4 +1,5 @@
 import requests
+import os.path
 
 API_KEY = "trnsl.1.1.20170328T091606Z.27d989b564203909.e9dc3d53af21dfcfb3ac0bd40a711a13e0cb6624"
 URL = "https://translate.yandex.net/api/v1.5/tr.json/translate"
@@ -25,8 +26,8 @@ def translate(text, from_lang, to_lang):
 
 # функция чтения строк из файла, перевода и записи результата в файл
 # пример использования: print(file_to_translate("DE.txt", "de", "ru"))
-def file_to_translate(file_name, from_lang, to_lang="ru", destination_file=""):
-    if destination_file == "":
+def file_to_translate(file_name, from_lang, to_lang="ru", destination_file=None):
+    if not destination_file:
         destination_file = file_name + "." + from_lang + "-" + to_lang + ".txt"
     text = ""
     with open(file_name, "r", encoding="utf-8") as file:
@@ -39,22 +40,23 @@ def file_to_translate(file_name, from_lang, to_lang="ru", destination_file=""):
 
 # функция для перевода подготовленных файлов из задания №2
 def news_files_translate(news_files):
-    for file_name in news_files:
-        from_lang = news_files[file_name]
-        file_to_translate(file_name, from_lang)
+    for file_name, lang in news_files.items():
+        file_to_translate(file_name, lang)
 
 
 # функция для ввода имени исходного файла, имени файла для результата, языка с какого на какой переводить
 def translate_input():
     file_name = str(input("Введите имя файла для перевода:"))
-    destination_file = str(input("Введите имя файла для результата:"))
-    from_lang = str(input("Введите язык оригинала:"))
-    to_lang = str(input("Введите язык перевода:"))
-    file_to_translate(file_name, from_lang, to_lang, destination_file)
+    if os.path.exists(file_name):
+        destination_file = str(input("Введите имя файла для результата:"))
+        from_lang = str(input("Введите язык оригинала:"))
+        to_lang = str(input("Введите язык перевода:"))
+        file_to_translate(file_name, from_lang, to_lang, destination_file)
+    else:
+        print("Файл не найден")
 
 
-news_files_translate(news_files)
-
+#news_files_translate(news_files)
 translate_input()
 
 
