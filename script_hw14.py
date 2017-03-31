@@ -56,7 +56,7 @@ def translate_input():
         print("Файл не найден")
 
 
-#news_files_translate(news_files)
+news_files_translate(news_files)
 translate_input()
 
 
